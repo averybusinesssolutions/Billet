@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31815.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Billet.Server", "Server\Billet.Server.csproj", "{4BE0F471-37D4-4FD2-B527-4D3CE6AA1A73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Billet.Server", "Server\Billet.Server.csproj", "{4BE0F471-37D4-4FD2-B527-4D3CE6AA1A73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Billet.Client", "Client\Billet.Client.csproj", "{37ED84A1-7A54-41E2-AE50-708BED203F65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Billet.Client", "Client\Billet.Client.csproj", "{37ED84A1-7A54-41E2-AE50-708BED203F65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Billet.Shared", "Shared\Billet.Shared.csproj", "{84089626-535E-4BE3-ABAF-7DFD9A977E03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Billet.Shared", "Shared\Billet.Shared.csproj", "{84089626-535E-4BE3-ABAF-7DFD9A977E03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Billet_Test", "Billet_Test\Billet_Test.csproj", "{EB8D9709-6D44-430A-A8A1-51B6691D522B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{84089626-535E-4BE3-ABAF-7DFD9A977E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84089626-535E-4BE3-ABAF-7DFD9A977E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84089626-535E-4BE3-ABAF-7DFD9A977E03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB8D9709-6D44-430A-A8A1-51B6691D522B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB8D9709-6D44-430A-A8A1-51B6691D522B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB8D9709-6D44-430A-A8A1-51B6691D522B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB8D9709-6D44-430A-A8A1-51B6691D522B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
