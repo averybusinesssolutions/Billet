@@ -11,6 +11,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<InvoiceContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("InvoiceContext")));
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
