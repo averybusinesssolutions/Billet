@@ -1,4 +1,4 @@
-﻿using Billet.Server.Models;
+﻿using Billet.Server.Models.Invoicing;
 using Microsoft.EntityFrameworkCore;
 
 namespace Billet.Server.Data
@@ -12,7 +12,7 @@ namespace Billet.Server.Data
             _context = context;
         }
 
-        public async Task<IEnumerable<Invoice>> GetAllAsync()
+        public async Task<IEnumerable<Invoice>> ListAsync()
         {
             return await _context.Invoices.ToListAsync();
         }
@@ -24,7 +24,15 @@ namespace Billet.Server.Data
 
         public async Task SaveAsync(Invoice entity)
         {
-            _context.Update(entity);
+            if(await _context.Invoices.AnyAsync(x => x.Id == entity.Id))
+            {
+                _context.Update(entity);
+            }
+            else
+            {
+                _context.Add(entity);
+            }
+            
             await _context.SaveChangesAsync();
         }
     }

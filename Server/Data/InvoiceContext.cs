@@ -1,4 +1,4 @@
-﻿using Billet.Server.Models;
+﻿using Billet.Server.Models.Invoicing;
 using Microsoft.EntityFrameworkCore;
 
 namespace Billet.Server.Data

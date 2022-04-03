@@ -1,4 +1,4 @@
-﻿namespace Billet.Server.Models
+﻿namespace Billet.Server.Models.Clients
 {
     public class FinancialTransaction
     {
