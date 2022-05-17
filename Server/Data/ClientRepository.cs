@@ -20,10 +20,31 @@ namespace Billet.Server.Data
             return await _context.Clients.FirstAsync(x => x.Id == id);
         }
 
-        public async Task SaveAsync(Models.Clients.Client entity)
+        public async Task UpdateAsync(Models.Clients.Client entity)
         {
-            _context.Update(entity);
-            await _context.SaveChangesAsync();
+            if (await _context.Clients.AnyAsync(x => x.Id == entity.Id))
+            {
+                _context.Update(entity);
+            }
+            else
+            {
+                _context.Add(entity);
+            }
+        }
+
+        public async Task<bool> SaveAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == id);
+            if (client == null)
+            {
+                throw new ArgumentException($"Invoice with Id = {id}");
+            }
+            _context.Clients.Remove(client);
         }
     }
 }

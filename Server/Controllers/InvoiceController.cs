@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using Billet.Server.Dtos;
+using Billet.Server.Models.Invoicing;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Billet.Server.Controllers
 {
@@ -8,36 +11,100 @@ namespace Billet.Server.Controllers
     [ApiController]
     public class InvoiceController : ControllerBase
     {
+        private readonly Data.InvoiceRepository _invoiceRepository;
+
+        public InvoiceController(Data.InvoiceRepository invoiceRepository)
+        {
+            _invoiceRepository = invoiceRepository;
+        }
         // GET: api/<InvoiceController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<InvoiceReadDto>> GetAsync()
         {
-            return new string[] { "value1", "value2" };
+            var invoices = await _invoiceRepository.ListAsync();
+            var invoiceDtos = from invoice in invoices
+                              select new InvoiceReadDto()
+                              {
+                                  Id = invoice.Id,
+                                  Payee = invoice.Payee,
+                                  Payor = invoice.Payor,
+                                  IsApproved = invoice.IsApproved,
+                                  IsDeposited = invoice.IsDeposited,
+                                  IsPaid = invoice.IsPaid,
+                                  LineItems = invoice.LineItems
+                              };
+
+            return invoiceDtos;
         }
 
         // GET api/<InvoiceController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<InvoiceReadDto> GetAsync(Guid id)
         {
-            return "value";
+            var invoice = await _invoiceRepository.GetAsync(id);
+            return new InvoiceReadDto()
+            {
+                Id = invoice.Id,
+                Payee = invoice.Payee,
+                Payor = invoice.Payor,
+                IsApproved = invoice.IsApproved,
+                IsDeposited = invoice.IsDeposited,
+                IsPaid = invoice.IsPaid,
+                LineItems = invoice.LineItems
+            };
         }
 
         // POST api/<InvoiceController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] InvoiceCreateDto invoiceDto)
         {
+            Invoice invoice = new Invoice()
+            {
+                Id = Guid.NewGuid(),
+                IsApproved = invoiceDto.IsApproved,
+                IsDeposited = invoiceDto.IsDeposited,
+                IsPaid = invoiceDto.IsPaid,
+                LineItems = invoiceDto.LineItems,
+                Payee = invoiceDto.Payee,
+                Payor= invoiceDto.Payor,
+            };
+
+            await _invoiceRepository.UpdateAsync(invoice);
+
+            await _invoiceRepository.SaveAsync();
+            return CreatedAtAction(nameof(GetAsync), invoice);
         }
 
         // PUT api/<InvoiceController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(Guid id, [FromBody] InvoiceCreateDto invoiceDto)
         {
+            var invoice = await _invoiceRepository.GetAsync(id);
+            invoice.IsApproved = invoiceDto.IsApproved;
+            invoice.IsDeposited = invoiceDto.IsDeposited;
+            invoice.IsPaid = invoiceDto.IsPaid;
+            invoice.LineItems = invoiceDto.LineItems;
+            invoice.Payee = invoiceDto.Payee;
+            invoice.Payor = invoiceDto.Payor;
+
+            await _invoiceRepository.UpdateAsync(invoice);
+
+            await _invoiceRepository.SaveAsync();
+            return Ok(invoice);
         }
 
         // DELETE api/<InvoiceController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
+            var invoice = await _invoiceRepository.GetAsync(id);
+            if(invoice == null)
+            {
+                return NotFound();
+            }
+            await _invoiceRepository.DeleteAsync(id);
+            await _invoiceRepository.SaveAsync();
+            return Ok(invoice);
         }
     }
 }

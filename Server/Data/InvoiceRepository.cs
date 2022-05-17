@@ -22,9 +22,9 @@ namespace Billet.Server.Data
             return await _context.Invoices.FirstOrDefaultAsync(x => x.Id == id) ?? new Invoice();
         }
 
-        public async Task SaveAsync(Invoice entity)
+        public async Task UpdateAsync(Invoice entity)
         {
-            if(await _context.Invoices.AnyAsync(x => x.Id == entity.Id))
+            if (await _context.Invoices.AnyAsync(x => x.Id == entity.Id))
             {
                 _context.Update(entity);
             }
@@ -32,8 +32,21 @@ namespace Billet.Server.Data
             {
                 _context.Add(entity);
             }
-            
-            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> SaveAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var invoice = await _context.Invoices.FirstOrDefaultAsync(x => x.Id == id);
+            if(invoice == null)
+            {
+                throw new ArgumentException($"Invoice with Id = {id}");
+            }
+            _context.Invoices.Remove(invoice);
         }
     }
 }

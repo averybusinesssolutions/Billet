@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Billet.Server.Models.Invoicing; 
 
 namespace Billet_Test
 {
@@ -55,14 +54,38 @@ namespace Billet_Test
                 Payee = new Payee(),
                 Payor = new Payor()
             };
-            await repo.SaveAsync(invoice);
+            await repo.UpdateAsync(invoice);
+            await repo.SaveAsync();
             Assert.AreEqual(1, context.Invoices.Count());
         }
 
         [Test]
         public async Task GetAsync_Returns_Invoice()
         {
+            var options = new DbContextOptionsBuilder<InvoiceContext>()
+            .UseInMemoryDatabase(databaseName: "InvoiceDatabase")
+            .Options;
 
+            var context = new InvoiceContext(options);
+
+            var repo = new InvoiceRepository(context);
+            var id = Guid.NewGuid();
+            var invoice = new Invoice()
+            {
+                Id = id,
+                IsApproved = false,
+                IsDeposited = false,
+                IsPaid = false,
+                Payee = new Payee(),
+                Payor = new Payor()
+            };
+            await repo.UpdateAsync(invoice);
+            await repo.SaveAsync();
+
+            var result = await repo.GetAsync(id);
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Id == id);
         }
+   
     }
 }
